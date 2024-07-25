@@ -9,7 +9,7 @@ class DetailWatch extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['IDWatch', 'IDMaterialStrap', 'IDColor', 'Price'];
+    protected $fillable = ['IDWatch', 'IDMaterialStrap', 'IDColor', 'Price', 'Image', 'Quantity'];
 
     public $timestamps = false;
 
@@ -18,7 +18,7 @@ class DetailWatch extends Model
         return $this->belongsTo(Watch::class, 'IDWatch');
     }
 
-    public function strap()
+    public function materialStrap()
     {
         return $this->belongsTo(MaterialStrap::class, 'IDMaterialStrap');
     }

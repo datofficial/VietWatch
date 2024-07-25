@@ -41,6 +41,12 @@ Route::get('/getWards/{district_id}', [WardController::class, 'getWardsByDistric
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
 Route::get('/cart', [HomeController::class, 'cart'])->name('home.cart');
+Route::post('/cart/add', [HomeController::class, 'addToCart'])->name('home.addToCart');
+Route::post('/cart/update/{id}', [HomeController::class, 'updateCart'])->name('home.updateCart');
+Route::post('/cart/remove/{id}', [HomeController::class, 'removeFromCart'])->name('home.removeFromCart');
+
+Route::get('/checkout', [HomeController::class, 'checkout'])->name('home.checkout');
+Route::post('/checkout/process', [HomeController::class, 'processCheckout'])->name('checkout.process');
 
 Route::get('/detailwatch/{id}', [HomeController::class, 'detailwatch'])->name('home.detailwatch');
 

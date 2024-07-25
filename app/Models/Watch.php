@@ -10,7 +10,7 @@ class Watch extends Model
     use HasFactory;
 
     protected $fillable = [
-        'Name', 'Description', 'Image', 'Engine', 'AvoidWater', 'SizeStrap', 'SizeGlass', 'MaterialGlass', 'IDManufacturer', 'IDCategory'
+        'Name', 'Description', 'Engine', 'AvoidWater', 'SizeStrap', 'SizeGlass', 'MaterialGlass', 'IDManufacturer', 'IDCategory'
     ];
 
     public $timestamps = false;
@@ -23,5 +23,10 @@ class Watch extends Model
     public function category()
     {
         return $this->belongsTo(Category::class, 'IDCategory');
+    }
+    
+    public function detailWatches()
+    {
+        return $this->hasMany(DetailWatch::class, 'IDWatch');
     }
 }

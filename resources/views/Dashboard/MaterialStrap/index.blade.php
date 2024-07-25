@@ -38,7 +38,6 @@
                                     <tr>
                                         <th style="text-align: center;">ID</th>
                                         <th style="text-align: center;">Tên chất liệu dây</th>
-                                        <th style="text-align: center;">Mô tả</th>
                                         <th style="text-align: center;">Chỉnh sửa</th>
                                         <th style="text-align: center;">Xoá</th>
                                     </tr>
@@ -48,7 +47,6 @@
                                         <tr>
                                             <td style="text-align: center;">{{ $materialStrap->id }}</td>
                                             <td style="text-align: center;">{{ $materialStrap->Name }}</td>
-                                            <td style="text-align: justify;">{{ $materialStrap->Description }}</td>
                                             <td style="text-align: center;">
                                                 <a href="{{ route('material_straps.edit', $materialStrap->id) }}" class="btn btn-primary">
                                                     <i class="fa fa-edit" aria-hidden="true"></i> Chỉnh sửa

@@ -14,7 +14,6 @@
             <tr>
                 <th>ID</th>
                 <th>Tên</th>
-                <th>Hình ảnh</th>
                 <th>Động cơ</th>
                 <th>Khả năng chống nước</th>
                 <th>Nhà sản xuất</th>
@@ -27,7 +26,6 @@
                 <tr>
                     <td>{{ $watch->id }}</td>
                     <td>{{ $watch->Name }}</td>
-                    <td><img src="{{ asset('storage/' . $watch->Image) }}" alt="{{ $watch->Name }}" width="50"></td>
                     <td>{{ $watch->Engine }}</td>
                     <td>{{ $watch->AvoidWater }}</td>
                     <td>{{ $watch->manufacturer->Name }}</td>

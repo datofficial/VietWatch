@@ -12,7 +12,7 @@ class DetailWatchController extends Controller
 {
     public function index()
     {
-        $detailWatches = DetailWatch::with('watch', 'strap', 'color')->get();
+        $detailWatches = DetailWatch::with('watch', 'materialStrap', 'color')->get();
         return view('Dashboard.DetailWatch.index', compact('detailWatches'));
     }
 
@@ -26,16 +26,23 @@ class DetailWatchController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'IDWatch' => 'required',
-            'IDMaterialStrap' => 'required',
-            'IDColor' => 'required',
+        $validatedData = $request->validate([
+            'IDWatch' => 'required|exists:watches,id',
+            'IDMaterialStrap' => 'required|exists:material_straps,id',
+            'IDColor' => 'required|exists:colors,id',
             'Price' => 'required|numeric',
+            'Image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'Quantity' => 'required|integer|min:0',
         ]);
-    
-        DetailWatch::create($request->all());
-    
-        return redirect()->route('detail_watches.index')->with('success', 'Chi tiết đồng hồ đã được thêm thành công');
+
+        if ($request->hasFile('Image')) {
+            $imagePath = $request->file('Image')->store('images', 'public');
+            $validatedData['Image'] = $imagePath;
+        }
+
+        DetailWatch::create($validatedData);
+
+        return redirect()->route('detail_watches.index')->with('success', 'Chi tiết Đồng hồ đã được thêm thành công');
     }
 
     public function edit($id)
@@ -54,10 +61,19 @@ class DetailWatchController extends Controller
             'IDMaterialStrap' => 'required|exists:material_straps,id',
             'IDColor' => 'required|exists:colors,id',
             'Price' => 'required|numeric',
+            'Image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'Quantity' => 'required|integer|min:0',
         ]);
 
         $detailWatch = DetailWatch::findOrFail($id);
-        $detailWatch->update($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('Image')) {
+            $imagePath = $request->file('Image')->store('images', 'public');
+            $data['Image'] = $imagePath;
+        }
+
+        $detailWatch->update($data);
 
         return redirect()->route('detail_watches.index')->with('success', 'Chi tiết đồng hồ đã được cập nhật thành công');
     }
@@ -66,7 +82,6 @@ class DetailWatchController extends Controller
     {
         $detailWatch = DetailWatch::findOrFail($id);
         $detailWatch->delete();
-
         return redirect()->route('detail_watches.index')->with('success', 'Chi tiết đồng hồ đã được xóa thành công');
     }
 }

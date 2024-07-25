@@ -38,8 +38,10 @@
                                         <th style="text-align: center;">ID</th>
                                         <th style="text-align: center;">Giá</th>
                                         <th style="text-align: center;">Đồng hồ</th>
+                                        <th style="text-align: center;">Hình ảnh</th>
                                         <th style="text-align: center;">Dây đeo</th>
                                         <th style="text-align: center;">Màu sắc</th>
+                                        <th style="text-align: center;">Số lượng</th>
                                         <th style="text-align: center;">Hành động</th>
                                     </tr>
                                 </thead>
@@ -49,8 +51,12 @@
                                             <td style="text-align: center;">{{ $detailWatch->id }}</td>
                                             <td style="text-align: center;">{{ number_format($detailWatch->Price, 2) }}</td>
                                             <td style="text-align: center;">{{ $detailWatch->watch ? $detailWatch->watch->Name : 'N/A' }}</td>
-                                            <td style="text-align: center;">{{ $detailWatch->strap ? $detailWatch->strap->Name : 'N/A' }}</td>
+                                            <td style="text-align: center;">
+                                                <img src="{{ asset('storage/' . $detailWatch->Image) }}" alt="{{ $detailWatch->watch ? $detailWatch->watch->Name : 'N/A' }}" width="50">
+                                            </td>
+                                            <td style="text-align: center;">{{ $detailWatch->materialStrap ? $detailWatch->materialStrap->Name : 'N/A' }}</td>
                                             <td style="text-align: center;">{{ $detailWatch->color ? $detailWatch->color->Name : 'N/A' }}</td>
+                                            <td style="text-align: center;">{{ $detailWatch->Quantity }}</td>
                                             <td style="text-align: center;">
                                                 <a href="{{ route('detail_watches.edit', $detailWatch->id) }}" class="btn btn-primary">
                                                     <i class="fa fa-edit" aria-hidden="true"></i> Chỉnh sửa

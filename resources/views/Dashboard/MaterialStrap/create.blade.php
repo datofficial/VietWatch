@@ -40,13 +40,6 @@
                                 @endif
                             </div>
                             <div class="form-group">
-                                <label for="Description">Mô tả chất liệu dây</label>
-                                <textarea name="Description" class="form-control" id="Description" required>{{ old('Description') }}</textarea>
-                                @if ($errors->has('Description'))
-                                    <span class="text-danger">{{ $errors->first('Description') }}</span>
-                                @endif
-                            </div>
-                            <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Thêm chất liệu dây</button>
                                 <a href="{{ route('material_straps.index') }}" class="btn btn-secondary">Hủy</a>
                             </div>

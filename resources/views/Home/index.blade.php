@@ -59,34 +59,6 @@
     </div>
 </aside>
 
-{{-- Danh mục --}}
-{{-- <div class="colorlib-intro">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 text-center">
-                <h2 class="intro">DANH MỤC ĐỒNG HỒ</h2>
-            </div>
-        </div>
-    </div>
-</div> --}}
-
-{{-- <div class="colorlib-product">
-    <div class="container-fluid">
-        <div class="row">
-            @foreach($categories as $category)
-                <div class="col-sm-6 text-center">
-                    <div class="featured">
-                        <a href="{{ route('home.category', $category->id) }}" class="featured-img" style="background-image: url('{{ asset('Home/images/menwatch.jpeg') }}');"></a>
-                        <div class="desc">
-                            <h2><a href="{{ route('home.category', $category->id) }}">{{ $category->Name }}</a></h2>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-</div> --}}
-
 <div class="colorlib-product">
     <div class="container">
         <div class="row">
@@ -98,13 +70,36 @@
             @foreach($watches as $watch)
                 <div class="col-lg-3 mb-4 text-center">
                     <div class="product-entry border">
-                        <a href="{{ route('home.detailwatch', $watch->id) }}" class="prod-img">
-                            <img src="{{ asset('storage/' . $watch->Image) }}" class="img-fluid" alt="{{ $watch->Name }}">
-                        </a>
+                        @if($watch->detailWatches->count() > 1)
+                            <div id="carousel-{{ $watch->id }}" class="carousel slide" data-ride="carousel">
+                                <div class="carousel-inner">
+                                    @foreach($watch->detailWatches as $index => $detailWatch)
+                                        <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                            <a href="{{ route('home.detailwatch', $watch->id) }}" class="prod-img">
+                                                <img src="{{ asset('storage/' . $detailWatch->Image) }}" class="img-fluid" alt="{{ $watch->Name }}">
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <a class="carousel-control-prev" href="#carousel-{{ $watch->id }}" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carousel-{{ $watch->id }}" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                        @else
+                            @foreach($watch->detailWatches as $detailWatch)
+                                <a href="{{ route('home.detailwatch', $watch->id) }}" class="prod-img">
+                                    <img src="{{ asset('storage/' . $detailWatch->Image) }}" class="img-fluid" alt="{{ $watch->Name }}">
+                                </a>
+                            @endforeach
+                        @endif
                         <div class="desc">
                             <h2><a href="{{ route('home.detailwatch', $watch->id) }}">{{ $watch->manufacturer->Name }}</a></h2>
                             <h2><a href="{{ route('home.detailwatch', $watch->id) }}">{{ $watch->Name }}</a></h2>
-                            {{-- <span class="price">${{ number_format($watch->price, 2) }}</span> --}}
                         </div>
                     </div>
                 </div>

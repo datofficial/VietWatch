@@ -17,7 +17,7 @@
             </ul>
         </div>
     @endif
-    <form action="{{ route('watches.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('watches.store') }}" method="POST">
         @csrf
 
         <div class="form-group">
@@ -28,11 +28,6 @@
         <div class="form-group">
             <label for="Description">Mô tả</label>
             <textarea class="form-control" id="Description" name="Description" required>{{ old('Description') }}</textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="Image">Hình ảnh</label>
-            <input type="file" class="form-control-file" id="Image" name="Image" required>
         </div>
 
         <div class="form-group">

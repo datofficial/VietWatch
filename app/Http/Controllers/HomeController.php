@@ -7,14 +7,16 @@ use App\Models\Watch;
 use App\Models\User;
 use App\Models\Category;
 use App\Models\Manufacturer;
+use App\Models\DetailWatch;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $watches = Watch::all();
+        $watches = Watch::with('detailWatches')->get(); // Lấy watches cùng với detail watches
         $categories = Category::all();
         $manufacturers = Manufacturer::all();
         return view('Home.index', compact('watches', 'categories', 'manufacturers'));
@@ -25,7 +27,105 @@ class HomeController extends Controller
     {
         $categories = Category::all();
         $manufacturers = Manufacturer::all();
-        return view('Home.Cart.index', compact('categories', 'manufacturers'));
+        $cart = Session::get('cart', []);
+        return view('Home.Cart.index', compact('categories', 'manufacturers', 'cart'));
+    }
+
+    // Thêm sản phẩm vào giỏ hàng
+    public function addToCart(Request $request)
+    {
+        $detailWatch = DetailWatch::with('watch', 'materialStrap', 'color')->findOrFail($request->detailWatchId);
+        $cart = Session::get('cart', []);
+        
+        $id = $detailWatch->id;
+        if (isset($cart[$id])) {
+            $cart[$id]['quantity']++;
+        } else {
+            $cart[$id] = [
+                'id' => $id,
+                'name' => $detailWatch->watch->Name,
+                'price' => $detailWatch->Price,
+                'quantity' => 1,
+                'material' => $detailWatch->materialStrap->Name,
+                'color' => $detailWatch->color->Name,
+                'image' => $detailWatch->Image
+            ];
+        }
+    
+        Session::put('cart', $cart);
+        return redirect()->route('home.cart')->with('success', 'Đã thêm sản phẩm vào giỏ hàng!');
+    }
+
+    // Xóa sản phẩm khỏi giỏ hàng
+    public function removeFromCart($id)
+    {
+        $cart = Session::get('cart', []);
+
+        if (isset($cart[$id])) {
+            unset($cart[$id]);
+            Session::put('cart', $cart);
+        }
+
+        return redirect()->route('home.cart')->with('success', 'Đã xóa sản phẩm khỏi giỏ hàng!');
+    }
+
+    // Cập nhật số lượng sản phẩm trong giỏ hàng
+    public function updateCart(Request $request, $id)
+    {
+        $cart = Session::get('cart', []);
+        if (isset($cart[$id])) {
+            if ($request->quantity < 1) {
+                unset($cart[$id]);
+                Session::put('cart', $cart);
+                return redirect()->route('home.cart')->with('success', 'Sản phẩm đã được xóa khỏi giỏ hàng!');
+            } else {
+                $cart[$id]['quantity'] = $request->quantity;
+                Session::put('cart', $cart);
+                return redirect()->route('home.cart')->with('success', 'Đã cập nhật số lượng sản phẩm!');
+            }
+        }
+        return redirect()->route('home.cart')->with('error', 'Không tìm thấy sản phẩm trong giỏ hàng!');
+    }
+
+    // Trang thanh toán
+    public function checkout()
+    {
+        $cart = Session::get('cart', []);
+        $categories = Category::all();
+        $manufacturers = Manufacturer::all();
+        
+        // Tính tổng số tiền
+        $total = 0;
+        foreach ($cart as $item) {
+            if ($item['quantity'] < 1) {
+                return redirect()->route('home.cart')->with('error', 'Số lượng sản phẩm không hợp lệ. Vui lòng cập nhật giỏ hàng.');
+            }
+            $total += $item['price'] * $item['quantity'];
+        }
+
+        return view('Home.Checkout.index', compact('categories', 'manufacturers', 'cart', 'total'));
+    }
+
+
+    // Xử lý thanh toán
+    public function processCheckout(Request $request)
+    {
+        $cart = Session::get('cart', []);
+
+        // Kiểm tra số lượng sản phẩm trong giỏ hàng
+        foreach ($cart as $id => $item) {
+            if ($item['quantity'] < 1) {
+                return redirect()->route('home.checkout')->with('error', 'Số lượng sản phẩm không hợp lệ. Vui lòng cập nhật giỏ hàng.');
+            }
+        }
+
+        // Xử lý logic thanh toán ở đây
+        // Ví dụ: Lưu đơn hàng vào cơ sở dữ liệu, gửi email xác nhận, v.v.
+
+        // Sau khi xử lý thanh toán thành công, xóa giỏ hàng
+        Session::forget('cart');
+
+        return redirect()->route('home.index')->with('success', 'Thanh toán thành công!');
     }
 
     // Trang danh mục
@@ -66,9 +166,11 @@ class HomeController extends Controller
     public function detailwatch($id)
     {
         $watch = Watch::with('manufacturer', 'category')->findOrFail($id);
+        $detailWatch = DetailWatch::where('IDWatch', $id)->first(); // Lấy detail watch đầu tiên của đồng hồ này
+        $relatedDetailWatches = DetailWatch::where('IDWatch', $id)->get(); // Lấy tất cả detail watches của đồng hồ này
         $categories = Category::all();
         $manufacturers = Manufacturer::all();
-        return view('Home.DetailWatch.index', compact('watch', 'categories', 'manufacturers'));
+        return view('Home.DetailWatch.index', compact('watch', 'detailWatch', 'relatedDetailWatches', 'categories', 'manufacturers'));
     }
 
     // Trang liên hệ
@@ -78,7 +180,7 @@ class HomeController extends Controller
         $manufacturers = Manufacturer::all();
         return view('Home.Contact.index', compact('categories', 'manufacturers'));
     }
-    
+
     public function sendContact(Request $request)
     {
         // Xử lý gửi email hoặc lưu thông tin liên hệ vào cơ sở dữ liệu

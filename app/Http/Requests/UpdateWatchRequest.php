@@ -16,7 +16,6 @@ class UpdateWatchRequest extends FormRequest
         return [
             'Name' => 'required|string|max:255',
             'Description' => 'required|string',
-            'Image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'Engine' => 'required|string|max:255',
             'AvoidWater' => 'required|string|max:255',
             'SizeStrap' => 'required|string|max:255',
@@ -32,7 +31,6 @@ class UpdateWatchRequest extends FormRequest
         return [
             'Name.required' => 'Tên đồng hồ là bắt buộc.',
             'Description.required' => 'Mô tả là bắt buộc.',
-            'Image.image' => 'File phải là hình ảnh.',
             'Engine.required' => 'Động cơ là bắt buộc.',
             'AvoidWater.required' => 'Khả năng chống nước là bắt buộc.',
             'SizeStrap.required' => 'Kích cỡ dây đeo là bắt buộc.',

@@ -40,12 +40,6 @@
                                 <label for="Name">Tên chất liệu dây:</label>
                                 <input type="text" class="form-control" id="Name" name="Name" value="{{ old('Name', $materialStrap->Name) }}" required>
                             </div>
-
-                            <div class="form-group">
-                                <label for="Description">Mô tả:</label>
-                                <textarea class="form-control" id="Description" name="Description" rows="3">{{ old('Description', $materialStrap->Description) }}</textarea>
-                            </div>
-
                             <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
                             <a href="{{ route('material_straps.index') }}" class="btn btn-secondary">Hủy</a>
                         </form>

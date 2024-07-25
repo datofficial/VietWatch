@@ -26,14 +26,7 @@ class WatchController extends Controller
     public function store(StoreWatchRequest $request)
     {
         $data = $request->validated();
-        
-        if ($request->hasFile('Image')) {
-            $imagePath = $request->file('Image')->store('images', 'public');
-            $data['Image'] = $imagePath;
-        }
-
         Watch::create($data);
-
         return redirect()->route('watches.index')->with('success', 'Đồng hồ đã được tạo thành công');
     }
 
@@ -52,14 +45,7 @@ class WatchController extends Controller
     public function update(UpdateWatchRequest $request, Watch $watch)
     {
         $data = $request->validated();
-
-        if ($request->hasFile('Image')) {
-            $imagePath = $request->file('Image')->store('images', 'public');
-            $data['Image'] = $imagePath;
-        }
-
         $watch->update($data);
-
         return redirect()->route('watches.index')->with('success', 'Đồng hồ đã được cập nhật thành công');
     }
 

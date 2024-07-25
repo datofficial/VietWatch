@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h1 class="my-4">Chỉnh sửa Chi tiết Đồng hồ</h1>
-    <form action="{{ route('detail_watches.update', $detailWatch->id) }}" method="POST">
+    <form action="{{ route('detail_watches.update', $detailWatch->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -40,6 +40,19 @@
         <div class="form-group">
             <label for="Price">Giá</label>
             <input type="text" class="form-control" id="Price" name="Price" value="{{ old('Price', $detailWatch->Price) }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="Quantity">Số lượng</label>
+            <input type="number" class="form-control" id="Quantity" name="Quantity" value="{{ old('Quantity', $detailWatch->Quantity) }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="Image">Hình ảnh</label>
+            <input type="file" class="form-control-file" id="Image" name="Image">
+            @if ($detailWatch->Image)
+                <img src="{{ asset('storage/' . $detailWatch->Image) }}" alt="{{ $detailWatch->watch ? $detailWatch->watch->Name : 'N/A' }}" width="100">
+            @endif
         </div>
 
         <button type="submit" class="btn btn-primary">Cập nhật</button>

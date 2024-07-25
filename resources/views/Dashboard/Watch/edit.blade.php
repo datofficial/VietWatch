@@ -17,7 +17,7 @@
             </ul>
         </div>
     @endif
-    <form action="{{ route('watches.update', $watch->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('watches.update', $watch->id) }}" method="POST">
         @csrf
         @method('PUT')
 
@@ -29,14 +29,6 @@
         <div class="form-group">
             <label for="Description">Mô tả</label>
             <textarea class="form-control" id="Description" name="Description" required>{{ old('Description', $watch->Description) }}</textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="Image">Hình ảnh</label>
-            <input type="file" class="form-control-file" id="Image" name="Image">
-            @if ($watch->Image)
-                <img src="{{ asset('storage/' . $watch->Image) }}" alt="{{ $watch->Name }}" width="100">
-            @endif
         </div>
 
         <div class="form-group">
