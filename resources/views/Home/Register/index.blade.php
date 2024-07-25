@@ -8,7 +8,7 @@
                 <div class="card-header">Đăng ký</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('home.registerCustomer') }}">
+                    <form method="POST" action="{{ route('home.registerProcess') }}">
                         @csrf
 
                         <!-- Tên đăng nhập -->
@@ -138,12 +138,12 @@
                     .then(data => {
                         districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
                         wardSelect.innerHTML = '<option value="">Chọn xã/phường</option>';
-                        data.forEach(district => {
+                        for (const [key, value] of Object.entries(data)) {
                             var option = document.createElement('option');
-                            option.value = district.id;
-                            option.textContent = district.NameDistrict;
+                            option.value = key;
+                            option.textContent = value;
                             districtSelect.appendChild(option);
-                        });
+                        }
                     });
             } else {
                 districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
@@ -158,12 +158,12 @@
                     .then(response => response.json())
                     .then(data => {
                         wardSelect.innerHTML = '<option value="">Chọn xã/phường</option>';
-                        data.forEach(ward => {
+                        for (const [key, value] of Object.entries(data)) {
                             var option = document.createElement('option');
-                            option.value = ward.id;
-                            option.textContent = ward.NameWard;
+                            option.value = key;
+                            option.textContent = value;
                             wardSelect.appendChild(option);
-                        });
+                        }
                     });
             } else {
                 wardSelect.innerHTML = '<option value="">Chọn xã/phường</option>';

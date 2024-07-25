@@ -32,7 +32,7 @@ Route::resource('watches', WatchController::class);
 Route::resource('detail_watches', DetailWatchController::class);
 Route::resource('detail_orders', DetailOrderController::class);
 
-// Routes cho AJAX 
+// Routes cho AJAX
 Route::get('/getCities', [CityController::class, 'getCities']);
 Route::get('/getDistricts/{city_id}', [DistrictController::class, 'getDistrictsByCity']);
 Route::get('/getWards/{district_id}', [WardController::class, 'getWardsByDistrict']);
@@ -68,4 +68,4 @@ Route::get('/login', [UserController::class, 'loginCustomer'])->name('home.login
 Route::get('/login_process', [UserController::class, 'loginCustomer_process'])->name('home.loginProcess');
 
 Route::get('/register', [UserController::class, 'registerCustomer'])->name('home.registerCustomer');
-Route::get('/register_process', [UserController::class, 'register_process'])->name('home.registerProcess');
+Route::post('/register_process', [UserController::class, 'register_process'])->name('home.registerProcess');

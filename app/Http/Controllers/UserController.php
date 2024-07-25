@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Manufacturer;
 use App\Models\User;
 use App\Models\City;
 use App\Models\District;
@@ -10,6 +12,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Arr;
 class UserController extends Controller
@@ -72,10 +75,14 @@ class UserController extends Controller
         $districts = District::all();
         $cities = City::all();
         $wards = Ward::all();
+        $categories = Category::all();
+        $manufacturers = Manufacturer::all();
         return view('Home.Register.index', [
         'districts' => $districts,
         'cities' => $cities,
-        'wards' => $wards
+        'wards' => $wards,
+        'categories' => $categories,
+        'manufacturers' => $manufacturers,
         ]);
     }
 
@@ -83,15 +90,15 @@ class UserController extends Controller
     {
         $array = [];
         $array = Arr::add($array,'NameUser', $request->name);
-        $array = Arr::add($array, 'Email', $request->email);
-        $array = Arr::add($array, 'Password', bcrypt($request->password));
-        $array = Arr::add($array, 'PhoneNumber', $request->phonenumber);
+        $array = Arr::add($array, 'email', $request->email);
+        $array = Arr::add($array, 'password', Hash::make($request->password));
+        $array = Arr::add($array, 'PhoneNumber', $request->phone);
         $array = Arr::add($array, 'Address', $request->address);
-        $array = Arr::add($array, 'Role', $request->role);
-        $array = Arr::add($array, 'IDCity', $request->IDCity);
-        $array = Arr::add($array, 'IDDistrict', $request->IDDistrict);
-        $array = Arr::add($array, 'IDWard', $request->IDWard);
-        
+        $array = Arr::add($array, 'Role', 0);
+        $array = Arr::add($array, 'IDCity', $request->city);
+        $array = Arr::add($array, 'IDDistrict', $request->district);
+        $array = Arr::add($array, 'IDWard', $request->ward);
+
         User::create($array);
         // flash()->addSuccess('Thêm Thành Công');
         return Redirect::route('home.loginCustomer');
@@ -101,7 +108,7 @@ class UserController extends Controller
         return view('Home.Login.index');
     }
 
-    
+
 
     public function loginCustomer_process(Request $request) {
         $accountCustomer = $request->only(['email', 'password']);

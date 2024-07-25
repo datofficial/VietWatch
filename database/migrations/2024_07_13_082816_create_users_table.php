@@ -11,9 +11,9 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('NameUser');
-            $table->string('Password');
+            $table->string('password');
             $table->string('PhoneNumber', 15);
-            $table->string('Email');
+            $table->string('email');
             $table->string('Role');
             $table->foreignId('IDCity')->constrained('cities');
             $table->foreignId('IDDistrict')->constrained('districts');
