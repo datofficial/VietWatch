@@ -105,18 +105,25 @@ class UserController extends Controller
         return view('Home.Login.index');
     }
 
-    
-
-    public function loginCustomer_process(Request $request) {
-        $accountCustomer = $request->only(['email', 'password']);
-
-        if(Auth::guard('users')->attempt($accountCustomer)){
-            $account = Auth::guard('users')->user();
-            Auth::login($account);
-            session(['user' => $account]);
-            return Redirect::route('home.index');
-        }else{
-            return Redirect::route('home.loginCustomer');
+    public function loginCustomer_process(Request $request) 
+    {
+        $credentials = $request->only(['email', 'password']);
+        
+        // Tìm người dùng theo email
+        $user = User::where('email', $request->email)->first();
+        
+        // Kiểm tra người dùng có tồn tại và vai trò của người dùng có phải là 'user'
+        if ($user && $user->Role == 'user') {
+            // Thử đăng nhập
+            if (Auth::guard('customers')->attempt($credentials)) {
+                $account = Auth::guard('customers')->user();
+                session(['customer' => $account]);
+                return redirect()->route('home.index')->with('success', 'Đăng nhập thành công');
+            } else {
+                return redirect()->route('home.loginCustomer')->with('error', 'Sai email hoặc mật khẩu');
+            }
+        } else {
+            return redirect()->route('home.loginCustomer')->with('error', 'Tài khoản không tồn tại hoặc không có quyền truy cập');
         }
     }
 
@@ -124,5 +131,38 @@ class UserController extends Controller
         // Auth::logout();
         // session()->forget('customer');
         // return Redirect::route('customer.login');
+    }
+
+    // Phương thức hiển thị form đăng nhập admin
+    public function showAdminLoginForm()
+    {
+        return view('Dashboard.Login.index');
+    }
+
+    // Phương thức xử lý đăng nhập admin
+    public function adminLogin(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+        $admin = User::where('email', $request->email)->value('Role');
+        if($admin == 'admin') {
+            if (Auth::guard('admins')->attempt($credentials)) {
+                $account = Auth::guard('admins')->user();
+                Auth::login($account);
+                session(['admin' => $account]);
+                return redirect()->route('admin.dashboard');
+            } else {
+                return redirect()->back()->withErrors(['email' => 'Thông tin đăng nhập không chính xác.']);
+            }
+        }else {
+            return redirect()->back()->withErrors(['email' => 'Thông tin đăng nhập chưa chính xác.']);
+        }
+        
+    }
+
+    // Phương thức xử lý đăng xuất admin
+    public function adminLogout()
+    {
+        Auth::guard('admin')->logout();
+        return redirect()->route('admin.login');
     }
 }

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Chỉnh sửa thông tin cá nhân</h1>
+    <h1>Thông tin cá nhân</h1>
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -12,35 +12,26 @@
             </ul>
         </div>
     @endif
-    <form action="{{ route('home.updateProfile') }}" method="POST">
+    <form action="{{ route('home.profile.update') }}" method="POST">
         @csrf
-        @method('PUT')
+        @method('PUT') <!-- Thêm dòng này để spoof phương thức PUT -->
 
         <!-- Tên Người dùng -->
         <div class="form-group">
             <label for="NameUser">Tên khách hàng</label>
             <input type="text" class="form-control" id="NameUser" name="NameUser" value="{{ $user->NameUser }}" required>
-            @if ($errors->has('NameUser'))
-                <span class="text-danger">{{ $errors->first('NameUser') }}</span>
-            @endif
         </div>
 
         <!-- Số điện thoại -->
         <div class="form-group">
             <label for="PhoneNumber">Số điện thoại</label>
             <input type="text" class="form-control" id="PhoneNumber" name="PhoneNumber" value="{{ $user->PhoneNumber }}" required>
-            @if ($errors->has('PhoneNumber'))
-                <span class="text-danger">{{ $errors->first('PhoneNumber') }}</span>
-            @endif
         </div>
 
         <!-- Email -->
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="Email" value="{{ $user->Email }}" required>
-            @if ($errors->has('Email'))
-                <span class="text-danger">{{ $errors->first('Email') }}</span>
-            @endif
+            <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}" required>
         </div>
 
         <!-- Thành phố -->
@@ -52,9 +43,6 @@
                     <option value="{{ $city->id }}" {{ $city->id == $user->IDCity ? 'selected' : '' }}>{{ $city->NameCity }}</option>
                 @endforeach
             </select>
-            @if ($errors->has('IDCity'))
-                <span class="text-danger">{{ $errors->first('IDCity') }}</span>
-            @endif
         </div>
 
         <!-- Quận/Huyện -->
@@ -66,9 +54,6 @@
                     <option value="{{ $district->id }}" {{ $district->id == $user->IDDistrict ? 'selected' : '' }}>{{ $district->NameDistrict }}</option>
                 @endforeach
             </select>
-            @if ($errors->has('IDDistrict'))
-                <span class="text-danger">{{ $errors->first('IDDistrict') }}</span>
-            @endif
         </div>
 
         <!-- Xã/Phường -->
@@ -80,22 +65,16 @@
                     <option value="{{ $ward->id }}" {{ $ward->id == $user->IDWard ? 'selected' : '' }}>{{ $ward->NameWard }}</option>
                 @endforeach
             </select>
-            @if ($errors->has('IDWard'))
-                <span class="text-danger">{{ $errors->first('IDWard') }}</span>
-            @endif
         </div>
 
         <!-- Địa chỉ cụ thể -->
         <div class="form-group">
             <label for="Address">Địa chỉ cụ thể</label>
             <input type="text" class="form-control" id="Address" name="Address" value="{{ $user->Address }}" required>
-            @if ($errors->has('Address'))
-                <span class="text-danger">{{ $errors->first('Address') }}</span>
-            @endif
         </div>
 
-        <button type="submit" class="btn btn-primary">Cập nhật</button>
-        <a href="{{ route('home.profile') }}" class="btn btn-secondary">Hủy</a>
+        {{-- <button type="submit" class="btn btn-primary">Cập nhật</button> --}}
+        <a href="{{ route('home.profile') }}" class="btn btn-secondary">Trở về</a>
     </form>
 </div>
 

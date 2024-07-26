@@ -8,12 +8,12 @@
                     <div id="colorlib-logo"><a href="{{ url('/') }}">VietWatch</a></div>
                 </div>
                 <div class="col-sm-5 col-md-3">
-                    <form action="#" class="search-wrap">
+                    {{-- <form action="#" class="search-wrap">
                         <div class="form-group">
                             <input type="search" class="form-control search" placeholder="Tìm kiếm">
                             <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
                         </div>
-                    </form>
+                    </form> --}}
                 </div>
             </div>
             <div class="row">
@@ -28,15 +28,15 @@
                         </li>
                         <li class="{{ request()->is('contact') ? 'active' : '' }}"><a href="{{ route('home.contact') }}">Liên hệ</a></li>
                         <li class="cart {{ request()->is('cart') ? 'active' : '' }}"><a href="{{ url('/cart') }}"><i class="icon-shopping-cart"></i>Giỏ hàng [0]</a></li>
-                        <li class="has-dropdown {{ request()->is('profile') ? 'active' : '' }}">
-                            @if(Auth::check())
-                                <a href="{{ url('/profile') }}"><i class="icon-user"></i> {{ Auth::user()->NameUser }}</a>
+                        <li class="has-dropdown {{ request()->is('profile') || request()->is('orders') ? 'active' : '' }}">
+                            @if(session()->has('customer'))
+                                <a href="{{ route('home.profile') }}"><i class="icon-user"></i> {{ session('customer.email') }}</a>
                             @else
-                                <a href="{{ url('/profile') }}"><i class="icon-user"></i> Tôi</a>
+                                <a href="{{ route('home.loginCustomer') }}"><i class="icon-user"></i> Tôi</a>
                             @endif
                             <ul class="dropdown">
-                                <li><a href="{{ url('/profile') }}">Thông tin cá nhân</a></li>
-                                <li><a href="{{ url('/order-history') }}">Lịch sử đơn hàng</a></li>
+                                <li><a href="{{ route('home.profile') }}">Thông tin cá nhân</a></li>
+                                <li><a href="{{ route('home.orders') }}">Lịch sử đơn hàng</a></li>
                             </ul>
                         </li>
                     </ul>
