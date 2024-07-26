@@ -1,8 +1,8 @@
-@extends('Dashboard.Layout.index')
+@extends('Home.Layout.index')
 
 @section('content')
 <div class="container">
-    <h1>Thêm khách hàng</h1>
+    <h1>Chỉnh sửa thông tin cá nhân</h1>
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -12,31 +12,23 @@
             </ul>
         </div>
     @endif
-    <form action="{{ route('users.store') }}" method="POST">
+    <form action="{{ route('home.updateProfile') }}" method="POST">
         @csrf
+        @method('PUT')
 
         <!-- Tên Người dùng -->
         <div class="form-group">
             <label for="NameUser">Tên khách hàng</label>
-            <input type="text" class="form-control" id="NameUser" name="NameUser" required>
+            <input type="text" class="form-control" id="NameUser" name="NameUser" value="{{ $user->NameUser }}" required>
             @if ($errors->has('NameUser'))
                 <span class="text-danger">{{ $errors->first('NameUser') }}</span>
-            @endif
-        </div>
-
-        <!-- Mật khẩu -->
-        <div class="form-group">
-            <label for="password">Mật khẩu</label>
-            <input type="password" class="form-control" id="password" name="password" required>
-            @if ($errors->has('password'))
-                <span class="text-danger">{{ $errors->first('password') }}</span>
             @endif
         </div>
 
         <!-- Số điện thoại -->
         <div class="form-group">
             <label for="PhoneNumber">Số điện thoại</label>
-            <input type="text" class="form-control" id="PhoneNumber" name="PhoneNumber" required>
+            <input type="text" class="form-control" id="PhoneNumber" name="PhoneNumber" value="{{ $user->PhoneNumber }}" required>
             @if ($errors->has('PhoneNumber'))
                 <span class="text-danger">{{ $errors->first('PhoneNumber') }}</span>
             @endif
@@ -45,24 +37,11 @@
         <!-- Email -->
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required>
-            @if ($errors->has('email'))
-                <span class="text-danger">{{ $errors->first('email') }}</span>
+            <input type="email" class="form-control" id="email" name="Email" value="{{ $user->Email }}" required>
+            @if ($errors->has('Email'))
+                <span class="text-danger">{{ $errors->first('Email') }}</span>
             @endif
         </div>
-
-        {{-- <!-- Vai trò -->
-        <div class="form-group">
-            <label for="Role">Vai trò</label>
-            <select class="form-control" id="Role" name="Role" required>
-                <option value="">Chọn vai trò</option>
-                <option value="admin">Admin</option>
-                <option value="user">User</option>
-            </select>
-            @if ($errors->has('Role'))
-                <span class="text-danger">{{ $errors->first('Role') }}</span>
-            @endif
-        </div> --}}
 
         <!-- Thành phố -->
         <div class="form-group">
@@ -70,7 +49,7 @@
             <select class="form-control" id="IDCity" name="IDCity" required>
                 <option value="">Chọn thành phố</option>
                 @foreach ($cities as $city)
-                    <option value="{{ $city->id }}">{{ $city->NameCity }}</option>
+                    <option value="{{ $city->id }}" {{ $city->id == $user->IDCity ? 'selected' : '' }}>{{ $city->NameCity }}</option>
                 @endforeach
             </select>
             @if ($errors->has('IDCity'))
@@ -84,7 +63,7 @@
             <select class="form-control" id="IDDistrict" name="IDDistrict" required>
                 <option value="">Chọn quận/huyện</option>
                 @foreach ($districts as $district)
-                    <option value="{{ $district->id }}">{{ $district->NameDistrict }}</option>
+                    <option value="{{ $district->id }}" {{ $district->id == $user->IDDistrict ? 'selected' : '' }}>{{ $district->NameDistrict }}</option>
                 @endforeach
             </select>
             @if ($errors->has('IDDistrict'))
@@ -98,7 +77,7 @@
             <select class="form-control" id="IDWard" name="IDWard" required>
                 <option value="">Chọn xã/phường</option>
                 @foreach ($wards as $ward)
-                    <option value="{{ $ward->id }}">{{ $ward->NameWard }}</option>
+                    <option value="{{ $ward->id }}" {{ $ward->id == $user->IDWard ? 'selected' : '' }}>{{ $ward->NameWard }}</option>
                 @endforeach
             </select>
             @if ($errors->has('IDWard'))
@@ -109,61 +88,75 @@
         <!-- Địa chỉ cụ thể -->
         <div class="form-group">
             <label for="Address">Địa chỉ cụ thể</label>
-            <input type="text" class="form-control" id="Address" name="Address" required>
+            <input type="text" class="form-control" id="Address" name="Address" value="{{ $user->Address }}" required>
             @if ($errors->has('Address'))
                 <span class="text-danger">{{ $errors->first('Address') }}</span>
             @endif
         </div>
 
-        <button type="submit" class="btn btn-primary">Thêm</button>
-        <a href="{{ route('users.index') }}" class="btn btn-secondary">Hủy</a>
+        <button type="submit" class="btn btn-primary">Cập nhật</button>
+        <a href="{{ route('home.profile') }}" class="btn btn-secondary">Hủy</a>
     </form>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        // Khi thay đổi thành phố
-        $('#IDCity').on('change', function() {
-            var city_id = $(this).val();
-            if(city_id) {
+        var user = @json($user);
+        
+        function loadDistricts(cityID, selectedDistrictID = null) {
+            if (cityID) {
                 $.ajax({
-                    url: '/getDistricts/' + city_id,
-                    type: 'GET',
-                    dataType: 'json',
+                    url: '/getDistricts/' + cityID,
+                    type: "GET",
+                    dataType: "json",
                     success: function(data) {
-                        $('#IDDistrict').empty().append('<option value="">Chọn quận/huyện</option>');
-                        $('#IDWard').empty().append('<option value="">Chọn xã/phường</option>');
+                        $('#IDDistrict').empty();
+                        $('#IDDistrict').append('<option value="">Chọn Quận/Huyện</option>');
                         $.each(data, function(key, value) {
-                            $('#IDDistrict').append('<option value="'+ key +'">'+ value +'</option>');
+                            $('#IDDistrict').append('<option value="' + key + '"' + (key == selectedDistrictID ? ' selected' : '') + '>' + value + '</option>');
+                        });
+                        if (selectedDistrictID) {
+                            loadWards(selectedDistrictID, user.IDWard);
+                        }
+                    }
+                });
+            } else {
+                $('#IDDistrict').empty();
+                $('#IDWard').empty();
+            }
+        }
+
+        function loadWards(districtID, selectedWardID = null) {
+            if (districtID) {
+                $.ajax({
+                    url: '/getWards/' + districtID,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        $('#IDWard').empty();
+                        $('#IDWard').append('<option value="">Chọn Phường/Xã</option>');
+                        $.each(data, function(key, value) {
+                            $('#IDWard').append('<option value="' + key + '"' + (key == selectedWardID ? ' selected' : '') + '>' + value + '</option>');
                         });
                     }
                 });
             } else {
-                $('#IDDistrict').empty().append('<option value="">Chọn quận/huyện</option>');
-                $('#IDWard').empty().append('<option value="">Chọn xã/phường</option>');
+                $('#IDWard').empty();
             }
+        }
+
+        $('#IDCity').change(function() {
+            var cityID = $(this).val();
+            loadDistricts(cityID);
         });
 
-        // Khi thay đổi quận/huyện
-        $('#IDDistrict').on('change', function() {
-            var district_id = $(this).val();
-            if(district_id) {
-                $.ajax({
-                    url: '/getWards/' + district_id,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        $('#IDWard').empty().append('<option value="">Chọn xã/phường</option>');
-                        $.each(data, function(key, value) {
-                            $('#IDWard').append('<option value="'+ key +'">'+ value +'</option>');
-                        });
-                    }
-                });
-            } else {
-                $('#IDWard').empty().append('<option value="">Chọn xã/phường</option>');
-            }
+        $('#IDDistrict').change(function() {
+            var districtID = $(this).val();
+            loadWards(districtID);
         });
+
+        loadDistricts(user.IDCity, user.IDDistrict);
     });
 </script>
 @endsection

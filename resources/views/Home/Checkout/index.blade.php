@@ -47,11 +47,11 @@
             @csrf
             <div class="form-group">
                 <label for="name">Tên khách hàng:</label>
-                <input type="text" name="name" class="form-control" required>
+                <input type="text" name="name" class="form-control" value="{{ $user->NameUser }}" required>
             </div>
             <div class="form-group">
                 <label for="address">Địa chỉ:</label>
-                <input type="text" name="address" class="form-control" required>
+                <input type="text" name="address" class="form-control" value="{{ $user->Address }}" required>
             </div>
             <button type="submit" class="btn btn-success">Xác nhận thanh toán</button>
             <a href="{{ route('home.cart') }}" class="btn btn-secondary">Quay lại giỏ hàng</a>

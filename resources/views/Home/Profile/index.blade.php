@@ -12,18 +12,18 @@
             <img src="{{ asset('Home/images/profile-placeholder.png') }}" class="img-fluid" alt="Profile Picture">
         </a> --}}
         <div class="desc">
-            <h2>Tên: Nguyễn Văn A</h2>
-            <h2>Email: nguyenvana@gmail.com</h2>
-            <h2>Địa chỉ: 123 Tràng Tiền, Tràng Tiền, Hoàn Kiếm, Hà Nội</h2>
-            <span class="price">Ngày tham gia: 01/07/2024</span>
+            <h2>Tên: {{ $user->NameUser }}</h2>
+            <h2>Email: {{ $user->email }}</h2>
+            <h2>Số điện thoại: {{ $user->PhoneNumber }}</h2>
+            <h2>Địa chỉ: {{ $user->Address }}</h2>
+            <span class="price">Ngày tham gia: {{ $user->created_at->format('d/m/Y') }}</span>
         </div>
     </div>
 
-    <!-- Nút quản lý lịch sự mua hàng và mật khẩu -->
+    <!-- Nút quản lý lịch sử mua hàng và mật khẩu -->
     <div class="mt-4 text-center">
         <a href="{{ url('/profile/edit') }}" class="btn btn-success">Thay đổi thông tin cá nhân</a>
-        <a href="{{ url('/profile/change-password') }}" class="btn btn-warning">Thay đổi mật khẩu</a>
-        <a href="{{ url('/profile/edit') }}" class="btn btn-danger">Lịch sử mua hàng</a>
+        <a href="{{ url('/order-history') }}" class="btn btn-danger">Lịch sử mua hàng</a>
     </div>
 
     <div class="text-center mt-4">

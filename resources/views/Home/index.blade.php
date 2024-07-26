@@ -11,10 +11,8 @@
                         <div class="col-sm-6 offset-sm-3 text-center slider-text">
                             <div class="slider-text-inner">
                                 <div class="desc">
-                                    <h1 class="head-1">Bộ sưu tập</h1>
-                                    <h2 class="head-2">Đồng hồ</h2>
-                                    <h2 class="head-3">Nam</h2>
-                                    <p><a href="#" class="btn btn-primary">Tìm hiểu ngay</a></p>
+                                    <h1 class="head-1" style="color: #0e564a;">Bộ sưu tập đồng hồ Thuỵ Sĩ</h1>
+                                    <p><a href="{{ route('home.allCategories') }}" class="btn btn-primary">Tìm hiểu ngay</a></p>
                                 </div>
                             </div>
                         </div>
@@ -28,10 +26,8 @@
                         <div class="col-sm-6 offset-sm-3 text-center slider-text">
                             <div class="slider-text-inner">
                                 <div class="desc">
-                                    <h1 class="head-1">Các thương hiệu</h1>
-                                    <h2 class="head-2">đồng hồ</h2>
-                                    <h2 class="category"><span>Thuỵ Sĩ</span></h2>
-                                    <p><a href="#" class="btn btn-primary">Mua ngay tại đây</a></p>
+                                    <h1 class="head-1" style="color: rgb(208, 250, 255);">Bộ sưu tập đồng hồ Nhật Bản</h1>
+                                    <p><a href="{{ route('home.allCategories') }}" class="btn btn-primary">Mua ngay tại đây</a></p>
                                 </div>
                             </div>
                         </div>
@@ -45,10 +41,23 @@
                         <div class="col-sm-6 offset-sm-3 text-center slider-text">
                             <div class="slider-text-inner">
                                 <div class="desc">
-                                    <h1 class="head-1">Các thương hiệu</h1>
-                                    <h2 class="head-2">đồng hồ</h2>
-                                    <h2 class="category"><span>Nhật Bản</span></h2>
-                                    <p><a href="#" class="btn btn-primary">Khám phá ngay</a></p>
+                                    <h1 class="head-1" style="color: #0e564a;">Các thương hiệu đồng hồ Thuỵ Sĩ</h1>
+                                    <p><a href="{{ route('home.allCategories') }}" class="btn btn-primary">Khám phá ngay</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li style="background-image: url('{{ asset('Home/images/sliderwatch4.jpeg') }}');">
+                <div class="overlay"></div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6 offset-sm-3 text-center slider-text">
+                            <div class="slider-text-inner">
+                                <div class="desc">
+                                    <h1 class="head-1" style="color: rgb(208, 250, 255;">Bộ sưu tập đồng hồ Nhật Bản</h1>
+                                    <p><a href="{{ route('home.allCategories') }}" class="btn btn-primary">Tìm hiểu tại đây</a></p>
                                 </div>
                             </div>
                         </div>
@@ -123,37 +132,37 @@
         <div class="row">
             <div class="col partner-col text-center">
                 <a href="#" class="prod-img">
-                    <img src="{{ asset('Home/images/Tissot-logo.jpg') }}" class="img-fluid" alt="Tissot">
+                    <img src="{{ asset('Home/images/tissot-logo.jpg') }}" class="img-fluid" alt="Tissot">
                 </a>
             </div>
             <div class="col partner-col text-center">
                 <a href="#" class="prod-img">
-                    <img src="{{ asset('Home/images/Rolex-logo.jpg') }}" class="img-fluid" alt="Rolex">
+                    <img src="{{ asset('Home/images/rolex-logo.jpg') }}" class="img-fluid" alt="Rolex">
                 </a>
             </div>
             <div class="col partner-col text-center">
                 <a href="#" class="prod-img">
-                    <img src="{{ asset('Home/images/Longines-logo.jpg') }}" class="img-fluid" alt="Longines">
+                    <img src="{{ asset('Home/images/longines-logo.jpg') }}" class="img-fluid" alt="Longines">
                 </a>
             </div>
             <div class="col partner-col text-center">
                 <a href="#" class="prod-img">
-                    <img src="{{ asset('Home/images/PatekPhilippe-logo.png') }}" class="img-fluid" alt="Patek Philippe">
+                    <img src="{{ asset('Home/images/patek-philippe-logo.jpg') }}" class="img-fluid" alt="Patek Philippe">
                 </a>
             </div>
             <div class="col partner-col text-center">
                 <a href="#" class="prod-img">
-                    <img src="{{ asset('Home/images/Seiko-logo.png') }}" class="img-fluid" alt="Seiko">
+                    <img src="{{ asset('Home/images/seiko-logo.jpg') }}" class="img-fluid" alt="Seiko">
                 </a>
             </div>
             <div class="col partner-col text-center">
                 <a href="#" class="prod-img">
-                    <img src="{{ asset('Home/images/Citizen-logo.jpg') }}" class="img-fluid" alt="Citizen">
+                    <img src="{{ asset('Home/images/citizen-logo.jpg') }}" class="img-fluid" alt="Citizen">
                 </a>
             </div>
             <div class="col partner-col text-center">
                 <a href="#" class="prod-img">
-                    <img src="{{ asset('Home/images/Omega-logo.png') }}" class="img-fluid" alt="Omega">
+                    <img src="{{ asset('Home/images/omega-logo.jpg') }}" class="img-fluid" alt="Omega">
                 </a>
             </div>
             <div class="col partner-col text-center">

@@ -8,9 +8,13 @@ use App\Models\User;
 use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\DetailWatch;
+use App\Models\City;
+use App\Models\District;
+use App\Models\Ward;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -103,7 +107,10 @@ class HomeController extends Controller
             $total += $item['price'] * $item['quantity'];
         }
 
-        return view('Home.Checkout.index', compact('categories', 'manufacturers', 'cart', 'total'));
+        // Lấy thông tin người dùng đăng nhập
+        $user = Auth::user();
+
+        return view('Home.Checkout.index', compact('categories', 'manufacturers', 'cart', 'total', 'user'));
     }
 
 
@@ -193,10 +200,48 @@ class HomeController extends Controller
     // Trang thông tin khách hàng
     public function profile()
     {
+        $user = Auth::user(); // Lấy thông tin người dùng hiện tại
         $categories = Category::all();
         $manufacturers = Manufacturer::all();
-        return view('Home.Profile.index', compact('categories', 'manufacturers'));
+        return view('Home.Profile.index', compact('categories', 'manufacturers', 'user'));
     }
+
+    public function editProfile()
+    {
+        $user = Auth::user();
+        $cities = City::all();
+        $districts = District::all();
+        $wards = Ward::all();
+
+        return view('Home.Profile.edit', compact('user', 'cities', 'districts', 'wards'));
+    }
+
+    // public function updateProfile(Request $request)
+    // {
+    //     $user = Auth::user(); // Lấy thông tin người dùng hiện tại
+
+    //     $request->validate([
+    //         'NameUser' => 'required|string|max:255',
+    //         'Email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+    //         'PhoneNumber' => 'required|string|max:15',
+    //         'Address' => 'required|string|max:255',
+    //         'IDCity' => 'required|exists:cities,id',
+    //         'IDDistrict' => 'required|exists:districts,id',
+    //         'IDWard' => 'required|exists:wards,id',
+    //     ]);
+
+    //     $user->update([
+    //         'NameUser' => $request->NameUser,
+    //         'Email' => $request->Email,
+    //         'PhoneNumber' => $request->PhoneNumber,
+    //         'Address' => $request->Address,
+    //         'IDCity' => $request->IDCity,
+    //         'IDDistrict' => $request->IDDistrict,
+    //         'IDWard' => $request->IDWard,
+    //     ]);
+
+    //     return redirect()->route('home.profile')->with('success', 'Thông tin cá nhân đã được cập nhật thành công.');
+    // }
 
     public function showRegisterForm()
     {

@@ -16,12 +16,6 @@
                 <li class="nav-item" style="text-align: left;">
                     <a href="{{ route('users.index') }}">
                         <i class="fas fa-user"></i>
-                        <p>Quản lý nhân viên</p>
-                    </a>
-                </li>
-                <li class="nav-item" style="text-align: left;">
-                    <a href="{{ route('users.index') }}">
-                        <i class="fas fa-user"></i>
                         <p>Quản lý khách hàng</p>
                     </a>
                 </li>

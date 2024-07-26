@@ -22,24 +22,18 @@
                         <li class="{{ request()->is('/') ? 'active' : '' }}"><a href="{{ route('home.index') }}">Trang chủ</a></li>
                         <li class="has-dropdown {{ request()->is('categories') || request()->is('category/*') ? 'active' : '' }}">
                             <a href="{{ route('home.allCategories') }}">Danh mục</a>
-                            <ul class="dropdown">
-                                @foreach($categories as $category)
-                                    <li><a href="{{ route('home.category', $category->id) }}">{{ $category->Name }}</a></li>
-                                @endforeach
-                            </ul>
                         </li>
                         <li class="has-dropdown {{ request()->is('manufacturers') || request()->is('manufacturer/*') ? 'active' : '' }}">
                             <a href="{{ route('home.allManufacturers') }}">Thương hiệu</a>
-                            <ul class="dropdown">
-                                @foreach($manufacturers as $manufacturer)
-                                    <li><a href="{{ route('home.manufacturer', $manufacturer->id) }}">{{ $manufacturer->Name }}</a></li>
-                                @endforeach
-                            </ul>
                         </li>
                         <li class="{{ request()->is('contact') ? 'active' : '' }}"><a href="{{ route('home.contact') }}">Liên hệ</a></li>
                         <li class="cart {{ request()->is('cart') ? 'active' : '' }}"><a href="{{ url('/cart') }}"><i class="icon-shopping-cart"></i>Giỏ hàng [0]</a></li>
                         <li class="has-dropdown {{ request()->is('profile') ? 'active' : '' }}">
-                            <a href="{{ url('/profile') }}"><i class="icon-user"></i> Tôi</a>
+                            @if(Auth::check())
+                                <a href="{{ url('/profile') }}"><i class="icon-user"></i> {{ Auth::user()->NameUser }}</a>
+                            @else
+                                <a href="{{ url('/profile') }}"><i class="icon-user"></i> Tôi</a>
+                            @endif
                             <ul class="dropdown">
                                 <li><a href="{{ url('/profile') }}">Thông tin cá nhân</a></li>
                                 <li><a href="{{ url('/order-history') }}">Lịch sử đơn hàng</a></li>
@@ -58,12 +52,10 @@
                         <div class="owl-carousel2">
                             <div class="item">
                                 <div class="col">
-                                    {{-- <h3><a href="#">Các mẫu Đồng hồ sang trọng</a></h3> --}}
                                 </div>
                             </div>
                             <div class="item">
                                 <div class="col">
-                                    {{-- <h3><a href="#">Những sản phẩm đồng hồ bán chạy nhất</a></h3> --}}
                                 </div>
                             </div>
                         </div>

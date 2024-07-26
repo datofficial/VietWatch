@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Chỉnh sửa Người dùng</h1>
+    <h1>Chỉnh sửa khách hàng</h1>
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -18,7 +18,7 @@
 
         <!-- Tên Người dùng -->
         <div class="form-group">
-            <label for="NameUser">Tên Người dùng</label>
+            <label for="NameUser">Tên khách hàng</label>
             <input type="text" class="form-control" id="NameUser" name="NameUser" value="{{ $user->NameUser }}" required>
             @if ($errors->has('NameUser'))
                 <span class="text-danger">{{ $errors->first('NameUser') }}</span>
@@ -27,10 +27,10 @@
 
         <!-- Mật khẩu -->
         <div class="form-group">
-            <label for="Password">Mật khẩu</label>
-            <input type="password" class="form-control" id="Password" name="Password">
-            @if ($errors->has('Password'))
-                <span class="text-danger">{{ $errors->first('Password') }}</span>
+            <label for="password">Mật khẩu</label>
+            <input type="password" class="form-control" id="password" name="password">
+            @if ($errors->has('password'))
+                <span class="text-danger">{{ $errors->first('password') }}</span>
             @endif
         </div>
 
@@ -45,14 +45,14 @@
 
         <!-- Email -->
         <div class="form-group">
-            <label for="Email">Email</label>
-            <input type="email" class="form-control" id="Email" name="Email" value="{{ $user->Email }}" required>
-            @if ($errors->has('Email'))
-                <span class="text-danger">{{ $errors->first('Email') }}</span>
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}" required>
+            @if ($errors->has('email'))
+                <span class="text-danger">{{ $errors->first('email') }}</span>
             @endif
         </div>
 
-        <!-- Vai trò -->
+        {{-- <!-- Vai trò -->
         <div class="form-group">
             <label for="Role">Vai trò</label>
             <select class="form-control" id="Role" name="Role" required>
@@ -63,7 +63,7 @@
             @if ($errors->has('Role'))
                 <span class="text-danger">{{ $errors->first('Role') }}</span>
             @endif
-        </div>
+        </div> --}}
 
         <!-- Thành phố -->
         <div class="form-group">

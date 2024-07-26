@@ -23,7 +23,9 @@ class UserController extends Controller
     public function create()
     {
         $cities = City::all();
-        return view('Dashboard.User.create', compact('cities'));
+        $districts = District::all(); // Thêm dòng này để lấy tất cả các quận/huyện
+        $wards = Ward::all(); // Thêm dòng này để lấy tất cả các xã/phường
+        return view('Dashboard.User.create', compact('cities','districts','wards'));
     }
 
     public function store(StoreUserRequest $request)
@@ -40,7 +42,9 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $cities = City::all();
-        return view('Dashboard.User.edit', compact('user', 'cities'));
+        $districts = District::all(); // Thêm dòng này để lấy tất cả các quận/huyện
+        $wards = Ward::all(); // Thêm dòng này để lấy tất cả các xã/phường
+        return view('Dashboard.User.edit', compact('user', 'cities','districts','wards'));
     }
 
     public function update(UpdateUserRequest $request, User $user)
@@ -83,14 +87,14 @@ class UserController extends Controller
     {
         $array = [];
         $array = Arr::add($array,'NameUser', $request->name);
-        $array = Arr::add($array, 'Email', $request->email);
-        $array = Arr::add($array, 'Password', bcrypt($request->password));
-        $array = Arr::add($array, 'PhoneNumber', $request->phonenumber);
+        $array = Arr::add($array, 'email', $request->email);
+        $array = Arr::add($array, 'password', bcrypt($request->password));
+        $array = Arr::add($array, 'PhoneNumber', $request->phone);
         $array = Arr::add($array, 'Address', $request->address);
-        $array = Arr::add($array, 'Role', $request->role);
-        $array = Arr::add($array, 'IDCity', $request->IDCity);
-        $array = Arr::add($array, 'IDDistrict', $request->IDDistrict);
-        $array = Arr::add($array, 'IDWard', $request->IDWard);
+        $array = Arr::add($array, 'Role', 'user');
+        $array = Arr::add($array, 'IDCity', $request->city);
+        $array = Arr::add($array, 'IDDistrict', $request->district);
+        $array = Arr::add($array, 'IDWard', $request->ward);
         
         User::create($array);
         // flash()->addSuccess('Thêm Thành Công');
@@ -107,7 +111,10 @@ class UserController extends Controller
         $accountCustomer = $request->only(['email', 'password']);
 
         if(Auth::guard('users')->attempt($accountCustomer)){
-            echo 'login';
+            $account = Auth::guard('users')->user();
+            Auth::login($account);
+            session(['user' => $account]);
+            return Redirect::route('home.index');
         }else{
             return Redirect::route('home.loginCustomer');
         }

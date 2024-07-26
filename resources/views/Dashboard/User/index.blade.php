@@ -2,18 +2,18 @@
 
 @section('content')
 <div class="container">
-    <h1>Quản lý nhân viên</h1>
+    <h1>Quản lý khách hàng</h1>
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
     @endif
-    <a href="{{ route('users.create') }}" class="btn btn-primary">Thêm nhân viên</a>
+    <a href="{{ route('users.create') }}" class="btn btn-primary">Thêm khách hàng</a>
     <table class="table table-bordered mt-3">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Tên nhân viên</th>
+                <th>Tên khách hàng</th>
                 <th>Email</th>
                 <th>Thành phố</th>
                 <th>Quận/Huyện</th>
@@ -27,7 +27,7 @@
             <tr>
                 <td>{{ $user->id }}</td>
                 <td>{{ $user->NameUser }}</td>
-                <td>{{ $user->Email }}</td>
+                <td>{{ $user->email }}</td>
                 <td>{{ $user->city->NameCity }}</td>
                 <td>{{ $user->district->NameDistrict }}</td>
                 <td>{{ $user->ward->NameWard }}</td>

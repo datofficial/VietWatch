@@ -60,6 +60,8 @@ Route::get('/contact', [HomeController::class, 'contact'])->name('home.contact')
 Route::post('/contact/send', [HomeController::class, 'sendContact'])->name('contact.send');
 
 Route::get('/profile', [HomeController::class, 'profile'])->name('home.profile');
+Route::get('/profile/edit', [HomeController::class, 'editProfile'])->name('home.editProfile');
+Route::put('/profile/update', [HomeController::class, 'updateProfile'])->name('home.updateProfile');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 Route::get('/dashboard/orders', [DashboardController::class, 'orders'])->name('dashboard.orders');
@@ -68,4 +70,4 @@ Route::get('/login', [UserController::class, 'loginCustomer'])->name('home.login
 Route::get('/login_process', [UserController::class, 'loginCustomer_process'])->name('home.loginProcess');
 
 Route::get('/register', [UserController::class, 'registerCustomer'])->name('home.registerCustomer');
-Route::get('/register_process', [UserController::class, 'register_process'])->name('home.registerProcess');
+Route::post('/register_process', [UserController::class, 'register_process'])->name('home.registerProcess');

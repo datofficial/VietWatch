@@ -43,9 +43,9 @@
             </div>
 
             <div class="product-details">
-                <h4>Chi tiết sản phẩm</h4>
+                <h4 >Chi tiết sản phẩm</h4>
                 <ul>
-                    <li>Động cơ: {{ $watch->Engine }}</li>
+                    <li >Động cơ: {{ $watch->Engine }}</li>
                     <li>Chất liệu mặt kính: {{ $watch->MaterialGlass }}</li>
                     <li>Kích cỡ mặt kính: {{ $watch->SizeGlass }} mm</li>
                     <li>Kích cỡ dây đeo: {{ $watch->SizeStrap }} mm</li>
