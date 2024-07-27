@@ -24,7 +24,7 @@
                     <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                         <span class="profile-username">
                             <span class="op-7">Hi,</span>
-                            <span class="fw-bold">{{ optional(auth()->user())->name }}</span>
+                            <span class="fw-bold">{{ session('admin.name') }}</span>
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -32,9 +32,9 @@
                             <li>
                                 <div class="user-box">
                                     <div class="u-text">
-                                        <h4>{{ optional(auth()->user())->name }}</h4>
-                                        <p class="text-muted">{{ optional(auth()->user())->email }}</p>
-                                        <a href="profile.html" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
+                                        <h4>{{ session('admin.name') }}</h4>
+                                        <p class="text-muted">{{ session('admin.email') }}</p>
+                                        <a href="" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
                                     </div>
                                 </div>
                             </li>
@@ -50,7 +50,7 @@
                                              document.getElementById('logout-form').submit();">
                                     <i class="fas fa-sign-out-alt"></i> Logout
                                 </a>
-                                <form id="logout-form" action="" method="POST" style="display: none;">
+                                {{-- <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;"> --}}
                                     @csrf
                                 </form>
                             </li>

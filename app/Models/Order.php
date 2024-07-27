@@ -25,7 +25,9 @@ class Order extends Model
         'IDUser'
     ];
 
-    public function orderDetails()
+    protected $dates = ['created_at', 'updated_at'];
+
+    public function detailOrders()
     {
         return $this->hasMany(DetailOrder::class, 'IDOrder');
     }
@@ -53,5 +55,44 @@ class Order extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'IDUser');
+    }
+
+    // Thêm phương thức để lấy trạng thái bằng tiếng Việt
+    public function getStatusInVietnameseAttribute()
+    {
+        switch ($this->Status) {
+            case 'pending':
+                return 'Đang xử lý';
+            case 'processing':
+                return 'Đang giao';
+            case 'completed':
+                return 'Hoàn thành';
+            case 'cancelled':
+                return 'Đã hủy';
+            default:
+                return 'Không xác định';
+        }
+    }
+
+    // Thêm phương thức để lấy màu trạng thái
+    public function getStatusColorAttribute()
+    {
+        switch ($this->Status) {
+            case 'pending':
+                return 'warning';
+            case 'processing':
+                return 'primary';
+            case 'completed':
+                return 'success';
+            case 'cancelled':
+                return 'danger';
+            default:
+                return 'secondary';
+        }
+    }
+
+    public function orderDetails()
+    {
+        return $this->hasMany(DetailOrder::class, 'IDOrder');
     }
 }

@@ -97,10 +97,16 @@ class HomeController extends Controller
     // Trang thanh toán
     public function checkout()
     {
+            $user = Auth::guard('customers')->user(); // Lấy thông tin khách hàng đăng nhập
+
+        // Nếu khách hàng chưa đăng nhập, chuyển hướng đến trang đăng nhập
+        if (!$user) {
+            return redirect()->route('home.loginCustomer')->with('error', 'Bạn cần đăng nhập để thanh toán.');
+        }
+
         $cart = Session::get('cart', []);
         $categories = Category::all();
         $manufacturers = Manufacturer::all();
-        $user = Auth::user(); // Lấy thông tin người dùng hiện tại
         
         // Lấy danh sách các thành phố, quận/huyện, xã/phường, và phương thức thanh toán
         $cities = City::all();
@@ -286,11 +292,13 @@ class HomeController extends Controller
         if (!$request->session()->has('customer')) {
             return redirect()->route('home.loginCustomer')->with('error', 'Bạn cần đăng nhập để xem đơn hàng của mình.');
         }
-
+    
         $customerEmail = $request->session()->get('customer.email');
         $user_id = User::where('email', $customerEmail)->value('id');
-        $orders = Order::where('IDUser', $user_id)->get();
-
+        $orders = Order::where('IDUser', $user_id)
+                       ->orderBy('created_at', 'desc')
+                       ->paginate(4);
+    
         return view('Home.Order.index', compact('orders'));
     }
 
@@ -301,13 +309,13 @@ class HomeController extends Controller
             return redirect()->route('home.loginCustomer')->with('error', 'Bạn cần đăng nhập để xem chi tiết đơn hàng.');
         }
     
-        $order = Order::with('orderDetails')->findOrFail($id);
+        $order = Order::with('orderDetails.detailWatch.watch', 'orderDetails.detailWatch.materialStrap', 'orderDetails.detailWatch.color')->findOrFail($id);
     
         if ($order->IDUser != $request->session()->get('customer.id')) {
             return redirect()->route('home.orders')->with('error', 'Bạn không có quyền xem đơn hàng này.');
         }
     
-        return view('Home.Order.detail', compact('order'));
+        return view('Home.DetailOrder.index', compact('order'));
     }
 
     // Hủy đơn hàng

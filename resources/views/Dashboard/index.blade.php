@@ -1,5 +1,3 @@
-<!-- resources/views/Dashboard/index.blade.php -->
-
 @extends('Dashboard.Layout.index')
 
 @section('content')
@@ -45,54 +43,5 @@
         </div>
     </div>
 
-    <!-- Bảng dữ liệu -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">Đơn hàng mới</div>
-                <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Tên khách hàng</th>
-                                <th>Thời gian</th>
-                                <th>Tên đồng hồ</th>
-                                <th>Hình ảnh</th>
-                                <th>Số lượng</th>
-                                <th>Đơn giá</th>
-                                <th>Chi tiết</th>
-                                <th>Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Dữ liệu giả -->
-                            <tr>
-                                <th>1</th>
-                                <th>Nguyễn Văn A</th>
-                                <td>2024-07-01 09:15:00</td>
-                                <td>Rolex COSMOGRAPH DAYTONA</td>
-                                <td>
-                                    <a href="#" class="prod-img">
-                                        <img src="{{ asset('Home/images/Rolex COSMOGRAPH DAYTONA.png') }}" class="img-fluid" alt="Rolex COSMOGRAPH DAYTONA">
-                                    </a>
-                                </td>
-                                <td>1</td>
-                                <td>$65,000.00</td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-primary">Xem</a>
-                                </td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-warning">Thay đổi trạng thái</a>
-                                    <a href="#" class="btn btn-sm btn-danger">Xóa</a>
-                                </td>
-                            </tr>
-                            <!-- Thêm các hàng dữ liệu khác ở đây -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 @endsection

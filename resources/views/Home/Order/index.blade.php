@@ -32,9 +32,11 @@
                 @foreach($orders as $order)
                     <tr>
                         <td>{{ $order->id }}</td>
-                        <td>{{ $order->created_at->format('d/m/Y') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</td>
                         <td>{{ number_format($order->TotalPrice, 0, ',', '.') }} VND</td>
-                        <td>{{ $order->Status }}</td>
+                        <td>
+                            <span class="badge badge-{{ $order->status_color }}">{{ $order->status_in_vietnamese }}</span>
+                        </td>
                         <td>
                             <a href="{{ route('home.orderDetail', $order->id) }}" class="btn btn-info">Xem chi tiết</a>
                             @if($order->Status == 'pending')
@@ -48,6 +50,7 @@
                 @endforeach
             </tbody>
         </table>
+        {{ $orders->links() }} <!-- Thêm dòng này để hiển thị phân trang -->
     @endif
 </div>
 

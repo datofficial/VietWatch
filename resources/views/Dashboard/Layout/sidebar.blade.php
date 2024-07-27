@@ -2,7 +2,7 @@
     <div class="sidebar-logo">
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
-            <a href="{{ route('dashboard.index') }}" class="logo" style="text-decoration: none;">
+            <a href="{{ route('admin.dashboard') }}" class="logo" style="text-decoration: none;">
                 <h1 class="navbar-brand text-white" style="font-size: 24px; margin: 0; text-align: justify;">
                     <i class="fas fa-home" style="margin-right: 10px;"></i>VietWatch
                 </h1>
@@ -19,12 +19,12 @@
                         <p>Quản lý khách hàng</p>
                     </a>
                 </li>
-                {{-- <li class="nav-item" style="text-align: left;">
+                <li class="nav-item" style="text-align: left;">
                     <a href="{{ route('orders.index') }}">
                         <i class="fas fa-box"></i>
                         <p>Quản lý đơn hàng</p>
                     </a>
-                </li> --}}
+                </li>
                 <li class="nav-item" style="text-align: left;">
                     <a data-bs-toggle="collapse" href="#watchManagement" aria-expanded="false">
                         <i class="fas fa-watch"></i>

@@ -47,21 +47,21 @@
             @csrf
             <div class="form-group">
                 <label for="name">Tên khách hàng:</label>
-                <input type="text" name="name" class="form-control" value="{{ $user->NameUser }}" required>
+                <input type="text" name="name" class="form-control" value="{{ $user ? $user->NameUser : '' }}" required>
             </div>
             <div class="form-group">
                 <label for="phone">Số điện thoại:</label>
-                <input type="text" name="phone" class="form-control" value="{{ $user->PhoneNumber }}" required>
+                <input type="text" name="phone" class="form-control" value="{{ $user ? $user->PhoneNumber : '' }}" required>
             </div>
             <div class="form-group">
                 <label for="address">Địa chỉ:</label>
-                <input type="text" name="address" class="form-control" value="{{ $user->Address }}" required>
+                <input type="text" name="address" class="form-control" value="{{ $user ? $user->Address : '' }}" required>
             </div>
             <div class="form-group">
                 <label for="city">Thành phố:</label>
                 <select name="city" class="form-control" required>
                     @foreach($cities as $city)
-                        <option value="{{ $city->id }}" {{ $city->id == $user->IDCity ? 'selected' : '' }}>{{ $city->NameCity }}</option>
+                        <option value="{{ $city->id }}" {{ $user && $city->id == $user->IDCity ? 'selected' : '' }}>{{ $city->NameCity }}</option>
                     @endforeach
                 </select>
             </div>
@@ -69,7 +69,7 @@
                 <label for="district">Quận/Huyện:</label>
                 <select name="district" class="form-control" required>
                     @foreach($districts as $district)
-                        <option value="{{ $district->id }}" {{ $district->id == $user->IDDistrict ? 'selected' : '' }}>{{ $district->NameDistrict }}</option>
+                        <option value="{{ $district->id }}" {{ $user && $district->id == $user->IDDistrict ? 'selected' : '' }}>{{ $district->NameDistrict }}</option>
                     @endforeach
                 </select>
             </div>
@@ -77,7 +77,7 @@
                 <label for="ward">Xã/Phường:</label>
                 <select name="ward" class="form-control" required>
                     @foreach($wards as $ward)
-                        <option value="{{ $ward->id }}" {{ $ward->id == $user->IDWard ? 'selected' : '' }}>{{ $ward->NameWard }}</option>
+                        <option value="{{ $ward->id }}" {{ $user && $ward->id == $user->IDWard ? 'selected' : '' }}>{{ $ward->NameWard }}</option>
                     @endforeach
                 </select>
             </div>

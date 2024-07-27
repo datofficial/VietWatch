@@ -2,76 +2,63 @@
 
 @section('content')
 <div class="container">
-    <h1>Danh sách đơn hàng</h1>
-    <!-- Bảng hiển thị danh sách đơn hàng -->
-    <div class="card mb-4">
-        <div class="card-header">
-            Danh sách đơn hàng
+    <h2>Danh sách đơn hàng</h2>
+
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
         </div>
-        <div class="card-body">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Tên khách hàng</th>
-                        <th>Thời gian</th>
-                        <th>Tên đồng hồ</th>
-                        <th>Hình ảnh</th>
-                        <th>Số lượng</th>
-                        <th>Đơn giá</th>
-                        <th>Chi tiết</th>
-                        <th>Trạng thái</th>
-                        <th>Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>2</th>
-                        <th>Nguyễn Văn B</th>
-                        <td>2024-07-01 09:15:00</td>
-                        <td>Rolex COSMOGRAPH DAYTONA</td>
-                        <td>
-                            <a href="#" class="prod-img">
-                                <img src="{{ asset('Home/images/Rolex COSMOGRAPH DAYTONA.png') }}" class="img-fluid" alt="Rolex COSMOGRAPH DAYTONA">
-                            </a>
-                        </td>
-                        <td>1</td>
-                        <td>$65,000.00</td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-primary">Xem</a>
-                        </td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-secondary">Đang vận chuyển</a>
-                        </td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-danger">Huỷ</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>1</th>
-                        <th>Nguyễn Văn A</th>
-                        <td>2024-06-30 20:15:00</td>
-                        <td>Rolex COSMOGRAPH DAYTONA</td>
-                        <td>
-                            <a href="#" class="prod-img">
-                                <img src="{{ asset('Home/images/Rolex COSMOGRAPH DAYTONA.png') }}" class="img-fluid" alt="Rolex COSMOGRAPH DAYTONA">
-                            </a>
-                        </td>
-                        <td>1</td>
-                        <td>$65,000.00</td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-primary">Xem</a>
-                        </td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-danger">Đã huỷ</a>
-                        </td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-danger">Huỷ</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
         </div>
-    </div>
+    @endif
+
+    @if($orders->isEmpty())
+        <p>Không có đơn hàng nào.</p>
+    @else
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Mã đơn hàng</th>
+                    <th>Khách hàng</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($orders as $order)
+                    <tr>
+                        <td>{{ $order->id }}</td>
+                        <td>{{ $order->NameCustomer }}</td>
+                        <td>{{ $order->user->email }}</td>
+                        <td>{{ $order->PhoneCustomer }}</td>
+                        <td>{{ $order->Address }}</td>
+                        <td>{{ number_format($order->TotalPrice, 0, ',', '.') }} VND</td>
+                        <td>
+                            <span class="badge badge-{{ $order->status_color }}">
+                                {{ $order->status_in_vietnamese }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{{ route('orders.show', $order->id) }}" class="btn btn-info">Xem chi tiết</a>
+                            <form action="{{ route('orders.destroy', $order->id) }}" method="POST" style="display:inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
+    {{ $orders->links() }} <!-- Thêm dòng này để hiển thị phân trang -->
 </div>
 @endsection

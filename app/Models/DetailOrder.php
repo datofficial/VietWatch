@@ -18,13 +18,16 @@ class DetailOrder extends Model
         'IDDetailWatch'
     ];
 
+    public $timestamps = false;
+
     public function order()
     {
         return $this->belongsTo(Order::class, 'IDOrder');
     }
 
-    public function watch()
+    public function detailWatch()
     {
-        return $this->belongsTo(Watch::class, 'IDDetailWatch');
+        return $this->belongsTo(DetailWatch::class, 'IDDetailWatch');
     }
 }
+

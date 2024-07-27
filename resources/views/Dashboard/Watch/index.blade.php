@@ -42,5 +42,6 @@
             @endforeach
         </tbody>
     </table>
+    {{ $watches->links() }} <!-- Thêm dòng này để hiển thị phân trang -->
 </div>
 @endsection

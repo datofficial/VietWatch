@@ -17,14 +17,11 @@ use App\Http\Controllers\DetailOrderController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
 
-
-Route::get('/',function(){
-
-});
-
 Route::get('admin/login', [UserController::class, 'showAdminLoginForm'])->name('admin.login');
 Route::post('admin/login', [UserController::class, 'adminLogin'])->name('admin.loginProcess');
 Route::post('admin/logout', [UserController::class, 'adminLogout'])->name('admin.logout');
+
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
 // Route cho trang admin
 
@@ -42,9 +39,6 @@ Route::resource('watches', WatchController::class);
 Route::resource('detail_watches', DetailWatchController::class);
 Route::resource('detail_orders', DetailOrderController::class);
 
-// Route::middleware('AdminMiddleware')->group(function (){
-    
-// });
 // Routes cho AJAX 
 Route::get('/getCities', [CityController::class, 'getCities']);
 Route::get('/getDistricts/{city_id}', [DistrictController::class, 'getDistrictsByCity']);
@@ -61,8 +55,9 @@ Route::post('/cart/remove/{id}', [HomeController::class, 'removeFromCart'])->nam
 Route::get('/checkout', [HomeController::class, 'checkout'])->name('home.checkout');
 Route::post('/checkout/process', [HomeController::class, 'processCheckout'])->name('checkout.process');
 
-Route::get('/orders', [HomeController::class, 'userOrders'])->name('home.orders');
-Route::get('/orders/{id}', [HomeController::class, 'orderDetail'])->name('home.orderDetail');
+Route::get('/homeOrders', [HomeController::class, 'userOrders'])->name('home.orders');
+Route::get('/homeOrders/{id}', [HomeController::class, 'orderDetail'])->name('home.orderDetail');
+// Route::get('/orders/{id}', [HomeController::class, 'orderDetail'])->name('home.orderDetail');
 Route::post('/orders/{id}/cancel', [HomeController::class, 'cancelOrder'])->name('home.cancelOrder');
 Route::post('/checkout/process', [HomeController::class, 'placeOrder'])->name('checkout.process');
 

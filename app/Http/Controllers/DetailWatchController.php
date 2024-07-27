@@ -12,7 +12,7 @@ class DetailWatchController extends Controller
 {
     public function index()
     {
-        $detailWatches = DetailWatch::with('watch', 'materialStrap', 'color')->get();
+        $detailWatches = DetailWatch::with('watch', 'materialStrap', 'color')->paginate(4);
         return view('Dashboard.DetailWatch.index', compact('detailWatches'));
     }
 

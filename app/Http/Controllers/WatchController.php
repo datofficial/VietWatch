@@ -12,7 +12,7 @@ class WatchController extends Controller
 {
     public function index()
     {
-        $watches = Watch::all();
+        $watches = Watch::paginate(4); // Hiển thị 4 đồng hồ mỗi trang
         return view('Dashboard.Watch.index', compact('watches'));
     }
 

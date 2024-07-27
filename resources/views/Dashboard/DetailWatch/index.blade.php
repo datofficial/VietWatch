@@ -84,5 +84,6 @@
             </div>
         </div>
     </div>
+    {{ $detailWatches->links() }} <!-- Thêm dòng này để hiển thị phân trang -->
 </div>
 @endsection

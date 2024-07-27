@@ -27,4 +27,10 @@ class DetailWatch extends Model
     {
         return $this->belongsTo(Color::class, 'IDColor');
     }
+
+    public function detailOrders()
+    {
+        return $this->hasMany(DetailOrder::class, 'IDDetailWatch');
+    }
 }
+
