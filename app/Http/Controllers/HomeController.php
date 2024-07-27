@@ -8,9 +8,16 @@ use App\Models\User;
 use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\DetailWatch;
+use App\Models\City;
+use App\Models\District;
+use App\Models\Ward;
+use App\Models\Order;
+use App\Models\DetailOrder; 
+use App\Models\PaymentMethod; 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -93,7 +100,14 @@ class HomeController extends Controller
         $cart = Session::get('cart', []);
         $categories = Category::all();
         $manufacturers = Manufacturer::all();
+        $user = Auth::user(); // Lấy thông tin người dùng hiện tại
         
+        // Lấy danh sách các thành phố, quận/huyện, xã/phường, và phương thức thanh toán
+        $cities = City::all();
+        $districts = District::all();
+        $wards = Ward::all();
+        $paymentMethods = PaymentMethod::all();
+
         // Tính tổng số tiền
         $total = 0;
         foreach ($cart as $item) {
@@ -103,9 +117,8 @@ class HomeController extends Controller
             $total += $item['price'] * $item['quantity'];
         }
 
-        return view('Home.Checkout.index', compact('categories', 'manufacturers', 'cart', 'total'));
+        return view('Home.Checkout.index', compact('categories', 'manufacturers', 'cart', 'total', 'user', 'cities', 'districts', 'wards', 'paymentMethods'));
     }
-
 
     // Xử lý thanh toán
     public function processCheckout(Request $request)
@@ -193,9 +206,47 @@ class HomeController extends Controller
     // Trang thông tin khách hàng
     public function profile()
     {
+        $user = Auth::user(); // Lấy thông tin người dùng hiện tại
         $categories = Category::all();
         $manufacturers = Manufacturer::all();
-        return view('Home.Profile.index', compact('categories', 'manufacturers'));
+        return view('Home.Profile.index', compact('categories', 'manufacturers', 'user'));
+    }
+
+    public function editProfile()
+    {
+        $user = Auth::user();
+        $cities = City::all();
+        $districts = District::all();
+        $wards = Ward::all();
+
+        return view('Home.Profile.edit', compact('user', 'cities', 'districts', 'wards'));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'NameUser' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . session('customer.id'),
+            'PhoneNumber' => 'required|string|max:15',
+            'Address' => 'required|string|max:255',
+            'IDCity' => 'required|exists:cities,id',
+            'IDDistrict' => 'required|exists:districts,id',
+            'IDWard' => 'required|exists:wards,id',
+        ]);
+    
+        $user = User::find(session('customer.id'));
+        $user->NameUser = $request->NameUser;
+        $user->email = $request->email;
+        $user->PhoneNumber = $request->PhoneNumber;
+        $user->Address = $request->Address;
+        $user->IDCity = $request->IDCity;
+        $user->IDDistrict = $request->IDDistrict;
+        $user->IDWard = $request->IDWard;
+        $user->save();
+    
+        session(['customer' => $user]);
+    
+        return redirect()->route('home.profile')->with('success', 'Thông tin cá nhân đã được cập nhật thành công.');
     }
 
     public function showRegisterForm()
@@ -227,5 +278,111 @@ class HomeController extends Controller
         ]);
 
         return redirect()->route('home.index')->with('success', 'Đăng ký thành công!');
+    }
+
+    // Xem đơn hàng
+    public function userOrders(Request $request)
+    {
+        if (!$request->session()->has('customer')) {
+            return redirect()->route('home.loginCustomer')->with('error', 'Bạn cần đăng nhập để xem đơn hàng của mình.');
+        }
+
+        $customerEmail = $request->session()->get('customer.email');
+        $user_id = User::where('email', $customerEmail)->value('id');
+        $orders = Order::where('IDUser', $user_id)->get();
+
+        return view('Home.Order.index', compact('orders'));
+    }
+
+    // Xem chi tiết đơn hàng
+    public function orderDetail($id, Request $request)
+    {
+        if (!$request->session()->has('customer')) {
+            return redirect()->route('home.loginCustomer')->with('error', 'Bạn cần đăng nhập để xem chi tiết đơn hàng.');
+        }
+    
+        $order = Order::with('orderDetails')->findOrFail($id);
+    
+        if ($order->IDUser != $request->session()->get('customer.id')) {
+            return redirect()->route('home.orders')->with('error', 'Bạn không có quyền xem đơn hàng này.');
+        }
+    
+        return view('Home.Order.detail', compact('order'));
+    }
+
+    // Hủy đơn hàng
+    public function cancelOrder($id, Request $request)
+    {
+        if (!$request->session()->has('customer')) {
+            return redirect()->route('home.loginCustomer')->with('error', 'Bạn cần đăng nhập để hủy đơn hàng của mình.');
+        }
+
+        $order = Order::findOrFail($id);
+
+        if ($order->IDUser != $request->session()->get('customer.id')) {
+            return redirect()->route('home.orders')->with('error', 'Bạn không có quyền hủy đơn hàng này.');
+        }
+
+        if ($order->Status == 'pending') {
+            $order->Status = 'cancelled';
+            $order->save();
+            return redirect()->route('home.orders')->with('success', 'Đơn hàng đã được hủy.');
+        } else {
+            return redirect()->route('home.orders')->with('error', 'Đơn hàng không thể hủy vì đã được xử lý.');
+        }
+    }
+
+    // Đặt hàng
+    public function placeOrder(Request $request)
+    {
+        if (!$request->session()->has('customer')) {
+            return redirect()->route('home.loginCustomer')->with('error', 'Bạn cần đăng nhập để đặt hàng.');
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:15',
+            'address' => 'required|string|max:255',
+            'city' => 'required|exists:cities,id',
+            'district' => 'required|exists:districts,id',
+            'ward' => 'required|exists:wards,id',
+            'payment_method' => 'required|exists:payment_methods,id',
+        ]);
+
+        $cart = Session::get('cart', []);
+
+        if (empty($cart)) {
+            return redirect()->route('home.cart')->with('error', 'Giỏ hàng của bạn đang trống.');
+        }
+
+        $customerEmail = $request->session()->get('customer.email');
+        $user_id = User::where('email', $customerEmail)->value('id');
+        $order = new Order();
+        $order->NameCustomer = $request->name;
+        $order->PhoneCustomer = $request->phone;
+        $order->Address = $request->address;
+        $order->IDCity = $request->city;
+        $order->IDDistrict = $request->district;
+        $order->IDWard = $request->ward;
+        $order->IDPaymentMethod = $request->payment_method;
+        $order->TotalPrice = array_sum(array_map(function($item) {
+            return $item['price'] * $item['quantity'];
+        }, $cart));
+        $order->Status = 'pending';
+        $order->IDUser = $user_id;
+        $order->save();
+
+        foreach ($cart as $item) {
+            $orderDetail = new DetailOrder();
+            $orderDetail->IDOrder = $order->id;
+            $orderDetail->IDDetailWatch = $item['id'];
+            $orderDetail->AmountOfWatch = $item['quantity'];
+            $orderDetail->Description = 'Order detail for watch id: ' . $item['id'];
+            $orderDetail->save();
+        }
+
+        Session::forget('cart');
+
+        return redirect()->route('home.orders')->with('success', 'Đơn hàng của bạn đã được đặt thành công.');
     }
 }

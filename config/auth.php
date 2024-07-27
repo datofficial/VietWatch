@@ -43,12 +43,15 @@ return [
             'provider' => 'users',
         ],
 
-        'users' => [
+        'customers' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'customers',
         ],
 
-    
+        'admins' => [
+                'driver' => 'session',
+                'provider' => 'admins',
+            ],
     ],
 
     /*
@@ -69,7 +72,12 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'customers' => [
+            'driver' => 'eloquent',
+            'model' => User::class,
+        ],
+
+        'admins' => [
             'driver' => 'eloquent',
             'model' => User::class,
         ],
